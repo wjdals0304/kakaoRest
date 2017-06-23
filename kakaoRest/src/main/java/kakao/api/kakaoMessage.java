@@ -31,6 +31,7 @@ public class kakaoMessage {
 		String json = jsonObject.toString();
 		
 		return json;
+		
 	}
 
 }
