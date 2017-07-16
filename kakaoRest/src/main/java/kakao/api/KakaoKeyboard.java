@@ -20,16 +20,20 @@ public class KakaoKeyboard {
 
 		JSONObject jsonObject = new JSONObject();
 		jsonObject.put("type", "buttons");
-		
+
 		List<String> list = new ArrayList<>();
-		list.add("a1");
-		list.add("b2");
+
+		list.add("날씨");
+		list.add("지하철");
+		list.add("버스");
+		list.add("맛집추천");
+
 		JSONArray array = JSONArray.fromObject(list);
-		
+
 		jsonObject.put("buttons", array);
 		String json = jsonObject.toString();
+
 		return json;
- 	
 	}
 
 }
