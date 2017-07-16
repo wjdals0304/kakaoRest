@@ -41,6 +41,7 @@ public class kakaoMessage {
 	@RequestMapping(method = RequestMethod.POST)
 	String returnMessage(@RequestBody Message message) {
 
+		//정민 start
 		if ("맛집추천".equals(message.getContent())) {
 			RESTAURANT_LOCATION_NAME=null;
 			RESTAURANT_TF="TRUE";
@@ -61,11 +62,11 @@ public class kakaoMessage {
 
 		if (RESTAURANT_TF.equals("TRUE") && foodKind.contains(message.getContent())
 				&& !RESTAURANT_LOCATION_NAME.equals(null)) {
-			
+			RESTAURANT_TF="FALSE";
 			return restaurant.restaurantMessageThird(RESTAURANT_LOCATION_NAME,message.getContent());
 			
 		}
-		
+		//정민 end
 		
 		// 지수 담당 start
 		if(message.getContent().equals("지하철")) {
