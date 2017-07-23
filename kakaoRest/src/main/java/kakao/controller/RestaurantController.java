@@ -8,13 +8,17 @@ import java.util.Map;
 
 import org.springframework.stereotype.Component;
 
+import naver.api.LocationNaverApi;
+import naver.api.Restaurant;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
 @Component
-public class Restaurant {
+public class RestaurantController {
 
-	public String restaurantMessageFirst() {
+	private LocationNaverApi naverApi = new LocationNaverApi();
+	
+	public String restaurantLocationMessage() {
 
 		JSONObject jsonObject = new JSONObject();
 
@@ -29,7 +33,7 @@ public class Restaurant {
 		return json;
 	}
 
-	public String restaurantMessageSecond() {
+	public String restaurantKindMessage() {
 		JSONObject jsonObject = new JSONObject();
 		JSONObject jsonObjectSub = new JSONObject();
 		Map<String, String> map = new HashMap<>();
@@ -55,26 +59,32 @@ public class Restaurant {
 		return json;
 	}
 
-	public String restaurantMessageThird(String locationName, String foodKind) {
+	public String restaurantApiMessage(String locationName, String foodKind) {
 		JSONObject jsonObject = new JSONObject();
 
 		JSONObject jsonObjectKeyboard = new JSONObject();
 
 		Map<String, Object> message = new LinkedHashMap<>();
-		message.put("text", locationName);
+
+		Restaurant restaurant = naverApi.getNaverApi(locationName, foodKind);
+
+		String textMessage = restaurant.getTitle() + "\n" + restaurant.getDescription() + "\n"
+				+ restaurant.getRoadAddress() + "\n" + restaurant.getTelephone();
+
+		message.put("text", textMessage);
 
 		Map<String, String> url = new HashMap<>();
 		url.put("label", "자세히 보기");
-		url.put("url", "http://www.naver.com");
+		url.put("url", restaurant.getLink());
 
 		message.put("message_button", url);
-		
+
 		jsonObject.put("message", message);
 
 		jsonObjectKeyboard.put("type", "buttons");
 
 		List<String> list = new ArrayList<>();
-		list.add("이거 먹을래 ");
+		list.add("이거 먹을래");
 		list.add("다른거 추천해줘");
 		list.add("처음으로");
 		JSONArray array = JSONArray.fromObject(list);
@@ -85,9 +95,25 @@ public class Restaurant {
 
 		String json = jsonObject.toString();
 
-
 		return json;
-
 	}
+
+	public String restaurantEatMessage() {
+		JSONObject jsonObject = new JSONObject();
+
+		Map<String, String> map = new HashMap<>();
+
+		map.put("text", "맛있게 먹어~");
+
+		jsonObject.put("message", map);
+
+		String json = jsonObject.toString();
+		return json;
+	}
+	
+
+	
+	
+	
 
 }
