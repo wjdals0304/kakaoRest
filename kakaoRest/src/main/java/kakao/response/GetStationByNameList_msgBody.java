@@ -9,25 +9,25 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement(name = "msgBody")
 @XmlAccessorType(XmlAccessType.FIELD)
-public class MsgBody {
+public class GetStationByNameList_msgBody {
 
 	@XmlElement(name = "itemList")
-	private List<ItemList> itemList;
+	private List<GetStationByNameList_ItemList> itemList;
 
-	public MsgBody(List<ItemList> itemList) {
+	public GetStationByNameList_msgBody(List<GetStationByNameList_ItemList> itemList) {
 		super();
 		this.itemList = itemList;
 	}
 
-	public MsgBody() {
+	public GetStationByNameList_msgBody() {
 		super();
 	}
 
-	public List<ItemList> getItemList() {
+	public List<GetStationByNameList_ItemList> getItemList() {
 		return itemList;
 	}
 
-	public void setItemList(List<ItemList> itemList) {
+	public void setItemList(List<GetStationByNameList_ItemList> itemList) {
 		this.itemList = itemList;
 	}
 	

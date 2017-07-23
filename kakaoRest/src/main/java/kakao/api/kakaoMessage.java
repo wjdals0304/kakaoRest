@@ -1,9 +1,7 @@
 package kakao.api;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,10 +22,12 @@ public class kakaoMessage {
 
 	private static String RESTAURANT_LOCATION_NAME;
 	private static String RESTAURANT_TF;
-	static int button = 0;
+	static int subway_button = 0;
+	static int bus_button = 0;
 
 	Set<String> locationSet = RestaurantLocation.containLocation();
 	List<String> foodKind = new ArrayList<>();
+	String station_name;
 	
 	@Autowired
 	private Restaurant restaurant;
@@ -40,58 +40,53 @@ public class kakaoMessage {
 
 	@RequestMapping(method = RequestMethod.POST)
 	String returnMessage(@RequestBody Message message) {
-
-		//정민 start
-		if ("맛집추천".equals(message.getContent())) {
-			RESTAURANT_LOCATION_NAME=null;
-			RESTAURANT_TF="TRUE";
-			return restaurant.restaurantMessageFirst();
-		}
-
-		if (RESTAURANT_TF.equals("TRUE") && locationSet.contains(message.getContent())) {
-			RESTAURANT_LOCATION_NAME = message.getContent();
-
-			foodKind.add("한식");
-			foodKind.add("양식");
-			foodKind.add("중식");
-			foodKind.add("기타");
-
-			String json = restaurant.restaurantMessageSecond();
-			return json;
-		}
-
-		if (RESTAURANT_TF.equals("TRUE") && foodKind.contains(message.getContent())
-				&& !RESTAURANT_LOCATION_NAME.equals(null)) {
-			RESTAURANT_TF="FALSE";
-			return restaurant.restaurantMessageThird(RESTAURANT_LOCATION_NAME,message.getContent());
-			
-		}
-		//정민 end
+		
 		
 		// 지수 담당 start
-		if(message.getContent().equals("지하철")) {
-			button = 1;
+		if(message.getContent().equals("지하철")) {	// 1)지하철 버튼을 누른다
+			subway_button = 1;
 			return trafficInfo.press_subway_button();
 		}
 		
-		if(button == 1) {
-			button = 0;
-			String subway_name = message.getContent();
-			return trafficInfo.write_subway_name(subway_name);
+		if(subway_button == 1) {	// 2)지하철역 이름을 입력한다
+			subway_button = 2;
+			station_name = message.getContent();
+			return trafficInfo.choose_subway_line(station_name);	// 입력한 지하철역의 호선을 버튼으로 전달
 		}
 		
+		if(subway_button == 2) {	//3) 지하철 호선을 선택한다
+			subway_button = 3;
+			String station_line = message.getContent();
+			return trafficInfo.write_subway_name(station_name, station_line);
+		}
+		
+		if(subway_button == 3) {	//4) 다른역 검색, 즐겨찾는 구간 추가, 처음으로 버튼 중 1개를 클릭한다
+			if(message.getContent().equals("다른 역 검색")) {
+				subway_button = 1;
+				return trafficInfo.press_subway_button();
+			}
+			else if(message.getContent().equals("즐겨찾는 역 추가")) {
+				
+			}
+			else {	// "처음으로" 버튼 클릭시
+				
+			}
+		}
+		
+		
 		if(message.getContent().equals("버스")) {
-			button = 2;
+			bus_button = 1;
 			return busInfo.press_bus_button();
 		}
 		
-		if(button == 2) {
-			button = 0;
+		if(bus_button == 1) {
+			bus_button = 2;
 			String station_id = message.getContent();
 			return busInfo.write_bus_num(station_id);
 		}
 		// 지수 담당 end
                    
+		
 		return null;
 	}
 

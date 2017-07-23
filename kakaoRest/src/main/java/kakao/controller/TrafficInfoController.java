@@ -32,11 +32,10 @@ public class TrafficInfoController {
 	}
 
 
-	public String get_subway_info(String station_name) {
+	public void set_response(String station_name) {
 		service_name = "realtimeStationArrival";
-		String url = "http://swopenAPI.seoul.go.kr/api/subway/{api_key}/json/{service_name}/0/5/{station_name}";
+		String url = "http://swopenAPI.seoul.go.kr/api/subway/{api_key}/json/{service_name}/0/20/{station_name}";
 		String response_message;
-		int total_data_count = 0;
 		
 		try {
 			decoded_api_key = URLDecoder.decode(api_key, "UTF-8");
@@ -44,33 +43,108 @@ public class TrafficInfoController {
 			e.printStackTrace();
 		}	
 
-		response = restTemplate.getForObject(url, RealtimeStationArrival.class,
+		this.response = restTemplate.getForObject(url, RealtimeStationArrival.class,
 				decoded_api_key, service_name, station_name);
+		
+		/*if(response.getErrorMessage().getCode().equals("INFO-200")) {
+			return null;
+		}
+		else {
+			return response;
+		}*/
+	}
+	
+	public String change_station_line_toNumber(String station_line) {
+		
+		switch(station_line) {
+		case "경의 중앙선":
+			station_line = "1063";
+			break;
+		case "공항철도":
+			station_line = "1065";
+			break;
+		case "신분당선":
+			station_line = "1077";
+			break;
+		case "분당선":
+			station_line = "1075";
+			break;
+		case "경춘선":
+			station_line = "1067";
+			break;
+		case "수인선":
+			station_line = "1071";
+			break;
+		default:
+			station_line = "100" + station_line.charAt(0);
+			break;
+		}
+		
+		return station_line;
+	}
+	
+	public String change_station_line_toButton(String station_line) {
+		switch(station_line) {
+		case "1063":
+			station_line = "경의 중앙선";
+			break;
+		case "1065":
+			station_line = "공항철도";
+			break;
+		case "1077":
+			station_line = "신분당선";
+			break;
+		case "1075":
+			station_line = "분당선";
+			break;
+		case "1067":
+			station_line = "경춘선";
+			break;
+		case "1071":
+			station_line = "수인선";
+			break;
+		default:
+			station_line = station_line.charAt(3) + "호선";
+			break;
+		}
+		return station_line;
+	}
+	
+	public String get_subway_info(String station_name, String station_line) {
+		service_name = "realtimeStationArrival";
+		String url = "http://swopenAPI.seoul.go.kr/api/subway/{api_key}/json/{service_name}/0/20/{station_name}";
+		String response_message = "@" + station_name + "역 " + station_line +  " 도착 정보" + "\n" + "\n";
+		int total_data_count;
+
+		station_line = change_station_line_toNumber(station_line);
+		
+		try {
+			decoded_api_key = URLDecoder.decode(api_key, "UTF-8");
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}	
+
+		this.response = restTemplate.getForObject(url, RealtimeStationArrival.class,
+				decoded_api_key, service_name, station_name);
+		total_data_count = response.getErrorMessage().getTotal();
 
 		
 		if(response.getErrorMessage().getCode().equals("INFO-200")) {
 			response_message = "잘못된 역 이름입니다.";
 			return response_message;
 		}
+		
 		else {
-			total_data_count = response.getErrorMessage().getTotal();
-			response_message = station_name + "역 도착정보 \n";
-			
-			/*for(int i=0 ; i<total_data_count ; i++) {
-				response_message += response.getRealtimeArrivalList().get(i).getSubwayId().charAt(3) + "호선 ";
-				response_message += response.getRealtimeArrivalList().get(i).getTrainLineNm() + "\n";
-				response_message += "도착 정보 : " + response.getRealtimeArrivalList().get(i).getArvlMsg2() + "\n";
-				response_message += "\n";
-			
-			}*/
-					/*response.getRealtimeArrivalList().get(0).getTrainLineNm() + "\n" +
-					"도착 정보 : " + response.getRealtimeArrivalList().get(0).getArvlMsg2() + "\n" +
-					response.getRealtimeArrivalList().get(0).getArvlMsg3();*/
-
-			response_message += response.getRealtimeArrivalList().get(0).getSubwayId().charAt(3) + "호선 ";
-			response_message += response.getRealtimeArrivalList().get(0).getTrainLineNm() + "\n";
-			response_message += "도착 정보 : " + response.getRealtimeArrivalList().get(0).getArvlMsg2() + "\n";
-			response_message += "\n";
+			for(int i=0 ; i<total_data_count ; i++) {
+				if(response.getRealtimeArrivalList().get(i).getSubwayId().equals(station_line)) {
+					response_message += response.getRealtimeArrivalList().get(i).getTrainLineNm() + "\n";
+					response_message += "도착 정보 : " + response.getRealtimeArrivalList().get(i).getArvlMsg2() + "\n";
+					response_message += "\n";
+				}
+				else {
+					continue;
+				}
+			}
 			
 			return response_message;
 		}
@@ -81,19 +155,56 @@ public class TrafficInfoController {
 		JSONObject jsonObject = new JSONObject();
 		Map<String, String> map = new HashMap<>();
 		
-		map.put("text", "검색할 지하철역의 이름을  알려주세요! 예)강남, 용산, 홍대입구");
+		map.put("text", "검색할 지하철역의 이름을  알려줘! 예)강남, 용산, 홍대입구");
 		jsonObject.put("message", map);
 		String json = jsonObject.toString();
 		
 		return json;
 	}
+	
+	public String choose_subway_line(String station_name) {	// step2 : 지하철이름을 입력했을 때 해당 역에 대한 호선을 버튼으로 전달.
+															// 만약 호선이 1개이면 바로 메시지로 전달
+		JSONObject jsonObject = new JSONObject();
+		Map<String, String> map = new HashMap<>();
+		Map<String, Object> keyboard_map = new HashMap<>();
+		List<String> subway_line_list = new ArrayList<String>();
+		
+		map.put("text", "검색 할 호선을 선택해줘!");
+		jsonObject.put("message", map);
+		
+		set_response(station_name);
+		int total_data_count = response.getErrorMessage().getTotal();
+		
+		for(int i=0 ; i<total_data_count ; i++) {
+			String temp = response.getRealtimeArrivalList().get(i).getSubwayId();
+			temp = change_station_line_toButton(temp);
+			
+			if(subway_line_list.contains(temp) == false) {
+			subway_line_list.add(temp);
+			}
 
-	public String write_subway_name(String subway_name) {	// step2 : 지하철역 버튼을 누른 후 지하철역을 입력했을 때
+		}
+		
+		if(subway_line_list.size() == 1) { 
+			return write_subway_name(station_name, subway_line_list.get(0)); 
+		}
+		
+		JSONArray array = JSONArray.fromObject(subway_line_list);
+		keyboard_map.put("type", "buttons");
+		keyboard_map.put("buttons", array);	
+		jsonObject.put("keyboard", keyboard_map);
+		
+		String json = jsonObject.toString();
+		return json;
+		
+	}
+
+	public String write_subway_name(String station_name, String station_line) {	// step3 : 지하철역 버튼을 누른 후 지하철역을 입력했을 때
 		JSONObject jsonObject = new JSONObject();
 		Map<String, String> map = new HashMap<>();
 		Map<String, Object> keyboard_map = new HashMap<>();
 		
-		String response_message = get_subway_info(subway_name);
+		String response_message = get_subway_info(station_name, station_line);
 		
 		map.put("text", response_message);
 		jsonObject.put("message", map);

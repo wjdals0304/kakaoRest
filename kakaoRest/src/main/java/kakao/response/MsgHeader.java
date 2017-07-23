@@ -2,10 +2,11 @@ package kakao.response;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
+@XmlRootElement(name = "msgHeader")
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "", propOrder = { "headerCd", "headerMsg", "itemCount" })
 public class MsgHeader {
 	private int headerCd;
 	private String headerMsg;

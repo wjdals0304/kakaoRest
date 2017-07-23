@@ -2,23 +2,14 @@ package kakao.response;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
+@XmlRootElement(name = "itemList")
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "", propOrder = { "arrmsg1", "arrmsg2", "arsId", "avgCf1", "avgCf2", "brdrde_Num1"
-		, "brdrde_Num2", "brerde_Div1", "brerde_Div2", "busRouteId", "busType1", "busType2", "expCf1"
-		, "expCf2", "exps1", "exps2", "firstTm", "full1", "full2", "goal1", "goal2", "isArrive1"
-		, "isArrive2", "isLast1", "isLast2", "kalCf1", "kalCf2", "kals1", "kals2", "lastTm", "mkTm"
-		, "namin2Sec1", "namin2Sec2", "neuCf1", "neuCf2", "neus1", "neus2", "nextBus", "nmain2Ord1"
-		, "nmain2Ord2", "nmain2Stnid1", "nmain2Stnid2", "nmain3Ord1", "nmain3Ord2", "nmain3Sec1"
-		, "nmain3Sec2", "nmain3Stnid1", "nmain3Stnid2", "nmainOrd1", "nmainOrd2", "nmainSec1"
-		, "nmainSec2", "nmainStnid1", "nmainStnid2", "nstnId1", "nstnId2", "nstnOrd1", "nstnOrd2"
-		, "nstnSec1", "nstnSec2", "nstnSpd1", "nstnSpd2", "plainNo1", "plainNo2", "rerdie_Div1"
-		, "rerdie_Div2", "reride_Num1", "reride_Num2", "routeType", "rtNm", "sectOrd1", "sectOrd2"
-		, "stId", "stNm", "staOrd", "stationNm1", "stationNm2", "term", "traSpd1", "traSpd2"
-		, "traTime1", "traTime2", "vehId1", "vehId2"})
 public class ItemList {
-	
+
 	private String arrmsg1;
 	private String arrmsg2;
 	private String arsId;
@@ -103,6 +94,7 @@ public class ItemList {
 	private String traTime2;
 	private String vehId1;
 	private String vehId2;
+	
 	public ItemList(String arrmsg1, String arrmsg2, String arsId, String avgCf1, String avgCf2, String brdrde_Num1,
 			String brdrde_Num2, String brerde_Div1, String brerde_Div2, String busRouteId, String busType1,
 			String busType2, String expCf1, String expCf2, String exps1, String exps2, String firstTm, String full1,
