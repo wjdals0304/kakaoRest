@@ -26,7 +26,6 @@ public class kakaoMessage {
 	Set<String> foodKind = FoodKind.containFoodKind();
 	String station_name;
 	
-	
 	private Restaurant restaurantInfo = new Restaurant();
 
 	@Autowired
@@ -59,6 +58,19 @@ public class kakaoMessage {
 			restaurantInfo.setKind(message.getContent());
 			return restaurant.restaurantApiMessage(restaurantInfo.getLocationName(), message.getContent());
 		}
+		
+		if(RESTAURANT_FLOW.equals("TWO") && "기타".equals(message.getContent())
+				&& !restaurantInfo.getLocationName().equals(null)){
+            RESTAURANT_FLOW = "THREE";
+			return restaurant.restaurantEtcMessage();
+		}
+
+		if(RESTAURANT_FLOW.equals("THREE")){
+			RESTAURANT_FLOW = "FALSE";
+			restaurantInfo.setKind(message.getContent());
+			return restaurant.restaurantApiMessage(restaurantInfo.getLocationName(), message.getContent());
+		}
+		
 
 		if (RESTAURANT_FLOW.equals("FALSE") && "이거 먹을래".equals(message.getContent())) {
 			return restaurant.restaurantEatMessage();

@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 import org.springframework.stereotype.Component;
 
@@ -24,7 +25,9 @@ public class RestaurantController {
 
 		Map<String, String> map = new HashMap<>();
 
-		map.put("text", "어느지역 맛집인지 말해줘~");
+		String textMessage = "어느지역 맛집인지 말해줘~ \n ex)강남역,건대"; 
+		
+		map.put("text",textMessage);
 
 		jsonObject.put("message", map);
 
@@ -66,16 +69,20 @@ public class RestaurantController {
 
 		Map<String, Object> message = new LinkedHashMap<>();
 
-		Restaurant restaurant = naverApi.getNaverApi(locationName, foodKind);
+		List<Restaurant> restaurantlist = naverApi.getNaverApi(locationName, foodKind);
 
-		String textMessage = restaurant.getTitle() + "\n" + restaurant.getDescription() + "\n"
-				+ restaurant.getRoadAddress() + "\n" + restaurant.getTelephone();
+		Random random = new Random();
+	
+		int number = random.nextInt(50);
+		
+		String textMessage = restaurantlist.get(number).getTitle() + "\n" + restaurantlist.get(number).getDescription() + "\n"
+				+ restaurantlist.get(number).getRoadAddress() + "\n" + restaurantlist.get(number).getTelephone();
 
 		message.put("text", textMessage);
 
 		Map<String, String> url = new HashMap<>();
 		url.put("label", "자세히 보기");
-		url.put("url", restaurant.getLink());
+		url.put("url", "https://search.naver.com/search.naver?query="+restaurantlist.get(number).getTitle());
 
 		message.put("message_button", url);
 
@@ -111,8 +118,18 @@ public class RestaurantController {
 		return json;
 	}
 	
+	public String restaurantEtcMessage() {
+		JSONObject jsonObject = new JSONObject();
 
-	
+		Map<String, String> map = new HashMap<>();
+
+		map.put("text", "어떤거 먹을거야? \n ex)치킨,커피");
+
+		jsonObject.put("message", map);
+
+		String json = jsonObject.toString();
+		return json;
+	}
 	
 	
 

@@ -5,6 +5,8 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 import org.springframework.stereotype.Component;
@@ -14,17 +16,17 @@ import com.google.gson.Gson;
 
 public class LocationNaverApi {
 
-	public Restaurant getNaverApi(String location,String foodKind) {
+	public List<Restaurant> getNaverApi(String location,String foodKind) {
 		String clientId = "jIoNKFnsROGeEz8etaZA";
 		String clientSecret = "UNQ1i8y0N3";
 
-		Restaurant restaurant = new Restaurant();
+		
+		List<Restaurant> list = new ArrayList<Restaurant>();
 
 		try {
-			Random random = new Random();
-			String text = URLEncoder.encode(location+foodKind, "UTF-8");
-			String apiURL = "https://openapi.naver.com/v1/search/local.json?query=" + text
-					+ "&sort=comment&start="+random.nextInt(10)+"&display=1";
+			String text = URLEncoder.encode(location+" "+foodKind, "UTF-8");
+			String apiURL = "https://openapi.naver.com/v1/search/local.json?query=" + text + "&sort=comment&start=1&display=50";
+
 
 			URL url = new URL(apiURL);
 			HttpURLConnection con = (HttpURLConnection) url.openConnection();
@@ -52,23 +54,29 @@ public class LocationNaverApi {
 			Gson gson = new Gson();
 
 			LocationJson locationJson = gson.fromJson(jsonResponse, LocationJson.class);
+			String regex = "<(/)?([a-zA-Z]*)(\\s[a-zA-Z]*=[^>]*)?(\\s)*(/)?>";
+
 
 			for (Restaurant rest : locationJson.getItems()) {
-				restaurant.setTitle(rest.getTitle());
+				Restaurant restaurant = new Restaurant();
+				restaurant.setTitle(rest.getTitle().replaceAll(regex, "") );
 				restaurant.setLink(rest.getLink());
-				restaurant.setDescription(rest.getDescription());
+				restaurant.setDescription(rest.getDescription().replaceAll(regex, ""));
 				restaurant.setTelephone(rest.getTelephone());
 				restaurant.setRoadAddress(rest.getRoadAddress());
 				restaurant.setMapx(rest.getMapx());
 				restaurant.setMapy(rest.getMapy());
+				
+				list.add(restaurant);
 			}
+			
 
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
-		return restaurant;
+		return list;
 
 	}
 
