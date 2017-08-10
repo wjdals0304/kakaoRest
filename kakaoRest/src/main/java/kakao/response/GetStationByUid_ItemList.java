@@ -42,6 +42,8 @@ public class GetStationByUid_ItemList {
 	private String stId;
 	private String stNm;
 	private String staOrd;
+	private String stationNm1;
+	private String stationNm2;
 	private String stationTp;
 	private String term;
 	private String traSpd1;
@@ -364,6 +366,18 @@ public class GetStationByUid_ItemList {
 	}
 	public void setVehId2(String vehId2) {
 		this.vehId2 = vehId2;
+	}
+	public String getStationNm1() {
+		return stationNm1;
+	}
+	public void setStationNm1(String stationNm1) {
+		this.stationNm1 = stationNm1;
+	}
+	public String getStationNm2() {
+		return stationNm2;
+	}
+	public void setStationNm2(String stationNm2) {
+		this.stationNm2 = stationNm2;
 	}
 	
 }

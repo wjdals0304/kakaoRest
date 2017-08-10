@@ -1,6 +1,9 @@
 package kakao.api;
 
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -8,123 +11,86 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import kakao.controller.BusInfoController;
-import kakao.controller.RestaurantController;
-import kakao.controller.TrafficInfoController;
 import kakao.domain.Message;
-import kakao.enumT.FoodKind;
-import naver.api.Restaurant;
+import kakao.functionCall.BusInfo;
+import kakao.functionCall.RestaurantInfo;
+import kakao.functionCall.SubwayInfo;
+import net.sf.json.JSONArray;
+import net.sf.json.JSONException;
+import net.sf.json.JSONObject;
 
 @RestController
 @RequestMapping("message")
 public class kakaoMessage {
-
-	static String RESTAURANT_FLOW;
-	static int subway_button = 0;
-	static int bus_button = 0;
 	
-	Set<String> foodKind = FoodKind.containFoodKind();
-	String station_name;
+	static String check = null;
+
+	@Autowired
+	private BusInfo bus_info;
 	
-	private Restaurant restaurantInfo = new Restaurant();
-
 	@Autowired
-	private RestaurantController restaurant;
-
+	private SubwayInfo subway_info;
+	
 	@Autowired
-	private TrafficInfoController trafficInfo;
+	private RestaurantInfo restaurant_info;
 
-	@Autowired
-	private BusInfoController busInfo;
 
 	@RequestMapping(method = RequestMethod.POST)
-	String returnMessage(@RequestBody Message message) {
+	String returnMessage(@RequestBody Message message)  {
 
-		// 정민 start
-		if ("맛집추천".equals(message.getContent())) {
-			RESTAURANT_FLOW = "ONE";
-			return restaurant.restaurantLocationMessage();
-		}
-
-		if (RESTAURANT_FLOW.equals("ONE")) {
-			RESTAURANT_FLOW = "TWO";
-			restaurantInfo.setLocationName(message.getContent());
-			return restaurant.restaurantKindMessage();
-		}
-
-		if (RESTAURANT_FLOW.equals("TWO") && foodKind.contains(message.getContent())
-				&& !restaurantInfo.getLocationName().equals(null)) {
-			RESTAURANT_FLOW = "FALSE";
-			restaurantInfo.setKind(message.getContent());
-			return restaurant.restaurantApiMessage(restaurantInfo.getLocationName(), message.getContent());
-		}
-		
-		if(RESTAURANT_FLOW.equals("TWO") && "기타".equals(message.getContent())
-				&& !restaurantInfo.getLocationName().equals(null)){
-            RESTAURANT_FLOW = "THREE";
-			return restaurant.restaurantEtcMessage();
-		}
-
-		if(RESTAURANT_FLOW.equals("THREE")){
-			RESTAURANT_FLOW = "FALSE";
-			restaurantInfo.setKind(message.getContent());
-			return restaurant.restaurantApiMessage(restaurantInfo.getLocationName(), message.getContent());
-		}
-		
-
-		if (RESTAURANT_FLOW.equals("FALSE") && "이거 먹을래".equals(message.getContent())) {
-			return restaurant.restaurantEatMessage();
-		}
-
-		if (RESTAURANT_FLOW.equals("FALSE") && "다른거 추천해줘".equals(message.getContent())) {
-			return restaurant.restaurantApiMessage(restaurantInfo.getLocationName(), restaurantInfo.getKind());
-		}
-		// 정민 end
-
-		// 지수 담당 start
-		if (message.getContent().equals("지하철")) { // 1)지하철 버튼을 누른다
-			subway_button = 1;
-			return trafficInfo.press_subway_button();
-		}
-
-		if (subway_button == 1) { // 2)지하철역 이름을 입력한다
-			subway_button = 2;
-			station_name = message.getContent();
-			return trafficInfo.choose_subway_line(station_name); // 입력한 지하철역의
-																	// 호선을 버튼으로
-																	// 전달
-		}
-
-		if (subway_button == 2) { // 3) 지하철 호선을 선택한다
-			subway_button = 3;
-			String station_line = message.getContent();
-			return trafficInfo.write_subway_name(station_name, station_line);
-		}
-
-		if (subway_button == 3) { // 4) 다른역 검색, 즐겨찾는 구간 추가, 처음으로 버튼 중 1개를 클릭한다
-			if (message.getContent().equals("다른 역 검색")) {
-				subway_button = 1;
-				return trafficInfo.press_subway_button();
-			} else if (message.getContent().equals("즐겨찾는 역 추가")) {
-
-			} else { // "처음으로" 버튼 클릭시
-
+		if (message.getContent().equals("지하철")) { 
+			check = "subway"; 
 			}
+		else if (message.getContent().equals("버스")) { 
+			check = "bus"; 
+			}
+		else if ( message.getContent().equals("맛집추천")) { 
+			check = "restr"; 
+			}
+		else if (message.getContent().equals("처음으로")) { 
+			check = null;
+			return getKeyboard();
+			}
+		else { 
+			
 		}
+		
+		
+		if(check.equals("subway")) { 
+			return subway_info.getMessage(message); 
+			}
+		else if (check.equals("bus")) {
+			return bus_info.getMessage(message); 
+			}
+		else if (check.equals("restr")) {
+			return restaurant_info.getMessage(message); 
+			}
+		else {
+			return null; 
+			}
+	}
+	
+	
+	String getKeyboard() throws JSONException {
 
-		if (message.getContent().equals("버스")) {
-			bus_button = 1;
-			return busInfo.press_bus_button();
-		}
+		JSONObject jsonObject = new JSONObject();
+		Map<String, Object> map = new HashMap<>();
 
-		if (bus_button == 1) {
-			bus_button = 2;
-			String station_id = message.getContent();
-			return busInfo.write_bus_num(station_id);
-		}
-		// 지수 담당 end
+		List<String> list = new ArrayList<>();
 
-		return null;
+		list.add("날씨");
+		list.add("지하철");
+		list.add("버스");
+		list.add("맛집추천");
+
+		JSONArray array = JSONArray.fromObject(list);
+		map.put("type", "buttons");
+		map.put("buttons", array);	
+
+		jsonObject.put("keyboard", map);
+		String json = jsonObject.toString();
+
+		return json;
 	}
 
 }

@@ -25,7 +25,7 @@ public class LocationNaverApi {
 
 		try {
 			String text = URLEncoder.encode(location+" "+foodKind, "UTF-8");
-			String apiURL = "https://openapi.naver.com/v1/search/local.json?query=" + text + "&sort=comment&start=1&display=50";
+			String apiURL = "https://openapi.naver.com/v1/search/local.json?query=" + text + "&sort=comment&start=1&display=20";
 
 
 			URL url = new URL(apiURL);
@@ -79,5 +79,6 @@ public class LocationNaverApi {
 		return list;
 
 	}
+
 
 }
