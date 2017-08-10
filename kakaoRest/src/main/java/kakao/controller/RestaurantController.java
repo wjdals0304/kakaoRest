@@ -73,10 +73,10 @@ public class RestaurantController {
 
 		Random random = new Random();
 	
-		int number = random.nextInt(50);
+		int number = random.nextInt(19);
 		
-		String textMessage = restaurantlist.get(number).getTitle() + "\n" + restaurantlist.get(number).getDescription() + "\n"
-				+ restaurantlist.get(number).getRoadAddress() + "\n" + restaurantlist.get(number).getTelephone();
+		String textMessage = restaurantlist.get(number).getTitle() + "\n\n" + restaurantlist.get(number).getDescription() + "\n\n"
+				+ restaurantlist.get(number).getRoadAddress() + "\n\n" + restaurantlist.get(number).getTelephone();
 
 		message.put("text", textMessage);
 
@@ -130,10 +130,6 @@ public class RestaurantController {
 		String json = jsonObject.toString();
 		return json;
 	}
-	
-	
-
-		
 	
 	
 
