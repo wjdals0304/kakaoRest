@@ -5,7 +5,7 @@ import java.util.Set;
 
 public enum FoodKind {
 
-	한식,양식,중식,기타; 
+	한식,양식,중식; 
 	
 	public static Set<String> containFoodKind(){
 		
