@@ -74,22 +74,26 @@ public class kakaoMessage {
 	String getKeyboard() throws JSONException {
 
 		JSONObject jsonObject = new JSONObject();
-		Map<String, Object> map = new HashMap<>();
-
+		JSONObject jsonObjectSub = new JSONObject();
+		Map<String, String> map = new HashMap<>();
+		map.put("text", "처음으로");
+		
+		jsonObject.put("message", map);
+		
+		jsonObjectSub.put("type", "buttons");
+		
 		List<String> list = new ArrayList<>();
-
 		list.add("날씨");
 		list.add("지하철");
 		list.add("버스");
 		list.add("맛집추천");
-
+		
 		JSONArray array = JSONArray.fromObject(list);
-		map.put("type", "buttons");
-		map.put("buttons", array);	
-
-		jsonObject.put("keyboard", map);
+		
+		jsonObjectSub.put("buttons", array);
+		jsonObject.put("keyboard", jsonObjectSub);
+		
 		String json = jsonObject.toString();
-
 		return json;
 	}
 

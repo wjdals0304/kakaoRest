@@ -11,12 +11,12 @@ public enum FoodKind {
 		
 		FoodKind[] foodKind = FoodKind.values();
 
-		Set<String> locationSet = new HashSet<>();
-		for (FoodKind locat : foodKind) {
-			locationSet.add(locat.name());
+		Set<String> foodSet = new HashSet<>();
+		for (FoodKind foo : foodKind) {
+			foodSet.add(foo.name());
 		}
 
-		return locationSet;
+		return foodSet;
 		
 	}
 
