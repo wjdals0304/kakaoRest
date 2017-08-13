@@ -47,6 +47,12 @@
 			<version>2.4</version>
 			<classifier>jdk13</classifier>
 		</dependency>
+		
+		<dependency>
+			<groupId>xom</groupId>
+			<artifactId>xom</artifactId>
+			<version>1.2.5</version>
+		</dependency> 
 
 		<dependency>
 			<groupId>net.sf.json-lib</groupId>
