@@ -25,7 +25,7 @@ public class RestaurantController {
 
 		Map<String, String> map = new HashMap<>();
 
-		String textMessage = "어느지역 맛집인지 말해줘~ \n ex)강남역,건대";
+		String textMessage = "어느 지역 맛 집인지  말해줘~(방긋) \n역이름으로 입력하면 더욱더 정확한 정보를 줄 수 있습니다.\n\nex)강남역,건대입구역";
 
 		map.put("text", textMessage);
 
@@ -75,30 +75,30 @@ public class RestaurantController {
 
 		Random random = new Random();
 
-		int number = random.nextInt(19);
+		int number = random.nextInt(restaurantlist.size());
 
 		String textMessage = null;
 
 		if ("".equals(restaurantlist.get(number).getDescription())) {
 
-			textMessage = restaurantlist.get(number).getTitle() + "\n\n" + "주소 : "
+			textMessage ="(별)"+restaurantlist.get(number).getTitle() + "(별)\n\n" + "주소 : "
 					+ restaurantlist.get(number).getRoadAddress() + "\n\n" + "전화번호 : "
 					+ restaurantlist.get(number).getTelephone();
 
 		} else if ("".equals(restaurantlist.get(number).getTelephone())) {
 
-			textMessage = restaurantlist.get(number).getTitle() + "\n\n" + "설명 :"
+			textMessage ="(별)"+ restaurantlist.get(number).getTitle() + "(별)\n\n" + "설명 :"
 					+ restaurantlist.get(number).getDescription() + "\n\n" + "주소 : "
 					+ restaurantlist.get(number).getRoadAddress() + "\n\n";
 
 		} else if ("".equals(restaurantlist.get(number).getDescription())
 				&& "".equals(restaurantlist.get(number).getTelephone())) {
 
-			textMessage = restaurantlist.get(number).getTitle() + "\n\n" + "주소 : "
+			textMessage = "(별)"+restaurantlist.get(number).getTitle() + "(별)\n\n" + "주소 : "
 					+ restaurantlist.get(number).getRoadAddress() + "\n\n";
 
 		} else {
-			textMessage = restaurantlist.get(number).getTitle() + "\n\n" + "설명 :"
+			textMessage ="(별)"+restaurantlist.get(number).getTitle() + "(별)\n\n" + "설명 :"
 					+ restaurantlist.get(number).getDescription() + "\n\n" + "주소 : "
 					+ restaurantlist.get(number).getRoadAddress() + "\n\n" + "전화번호 : "
 					+ restaurantlist.get(number).getTelephone();
@@ -118,7 +118,7 @@ public class RestaurantController {
 
 		List<String> list = new ArrayList<>();
 		list.add("이거 먹을래");
-		list.add("다른거 추천해줘");
+		list.add("다른 거 추천해줘");
 		list.add("처음으로");
 		JSONArray array = JSONArray.fromObject(list);
 
@@ -136,7 +136,7 @@ public class RestaurantController {
 
 		Map<String, String> map = new HashMap<>();
 
-		map.put("text", "맛있게 먹어~");
+		map.put("text", "맛있게 먹어~(좋아)");
 
 		jsonObject.put("message", map);
 
@@ -163,7 +163,7 @@ public class RestaurantController {
 
 		Map<String, String> map = new HashMap<>();
 
-		map.put("text", "죄송합니다. 무슨 말씀인지 모르겠어요.. \n\n 특정 역 이름이나 지역명을 입력해주면 더욱더 정확한 답변을 드릴 수 있습니다^^");
+		map.put("text", "죄송합니다. 무슨 말씀인지 모르겠어요.. \n\n특정 역 이름이나 지역명을 입력해주면 더욱더 정확한 답변을 드릴 수 있습니다^^");
 
 		jsonObject.put("message", map);
 
@@ -178,7 +178,7 @@ public class RestaurantController {
 
 		Map<String, String> map = new HashMap<>();
 
-		map.put("text", "죄송합니다. 무슨 말씀인지 모르겠어요.. \n\n 특정 음식을 입력해주면 더욱더 정확한 답변을 드릴 수 있습니다^^ ");
+		map.put("text", "죄송합니다. 무슨 말씀인지 모르겠어요.. \n\n특정 음식을 입력해주면 더욱더 정확한 답변을 드릴 수 있습니다^^ ");
 
 		jsonObject.put("message", map);
 

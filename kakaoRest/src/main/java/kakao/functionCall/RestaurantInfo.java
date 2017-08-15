@@ -78,7 +78,7 @@ public class RestaurantInfo implements functionCallConfig{
 		
 			return restaurant.restaurantEatMessage();
 		
-		} else if (RESTAURANT_FLOW.equals("FALSE") && "다른거 추천해줘".equals(message.getContent())) {
+		} else if (RESTAURANT_FLOW.equals("FALSE") && "다른 거 추천해줘".equals(message.getContent())) {
 			
 			return restaurant.restaurantApiMessage(restaurantInfo.getLocationName(), restaurantInfo.getKind());
 		}

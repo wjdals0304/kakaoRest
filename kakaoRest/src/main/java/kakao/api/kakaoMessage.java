@@ -86,7 +86,7 @@ public class kakaoMessage {
 			return dust_info.getMessage(message); 
 		}
 		else {
-			return null; 
+			 return null;
 			}
 	}
 	
@@ -116,5 +116,12 @@ public class kakaoMessage {
 		String json = jsonObject.toString();
 		return json;
 	}
+	
+	
+	
 
+	
+	
+	
+	 
 }
