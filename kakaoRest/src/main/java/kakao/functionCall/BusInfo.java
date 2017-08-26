@@ -11,7 +11,7 @@ public class BusInfo implements functionCallConfig{
 	
 	@Autowired
 	private BusInfoController busInfo;
-	
+
 	static String station_id;
 	int bus_button = 0;
 	
@@ -63,9 +63,6 @@ public class BusInfo implements functionCallConfig{
 			else if(msg.equals("즐겨찾는 버스 추가")) {
 
 			}
-			else if(msg.equals("처음으로")) {	// 처음으로 버튼 클릭 시
-				
-			}
 		}
 		else {
 
@@ -73,4 +70,7 @@ public class BusInfo implements functionCallConfig{
 		return null;
 	}
 
+	public void init() {
+		bus_button = 0;
+	}
 }

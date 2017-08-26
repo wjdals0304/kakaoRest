@@ -13,8 +13,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import kakao.domain.Message;
 import kakao.functionCall.BusInfo;
+import kakao.functionCall.DustInfo;
 import kakao.functionCall.RestaurantInfo;
 import kakao.functionCall.SubwayInfo;
+import kakao.functionCall.WeatherInfo;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONException;
 import net.sf.json.JSONObject;
@@ -34,6 +36,12 @@ public class kakaoMessage {
 	@Autowired
 	private RestaurantInfo restaurant_info;
 
+	@Autowired
+	private WeatherInfo weather_info;
+	
+	@Autowired
+	private DustInfo dust_info;
+
 
 	@RequestMapping(method = RequestMethod.POST)
 	String returnMessage(@RequestBody Message message)  {
@@ -47,8 +55,16 @@ public class kakaoMessage {
 		else if ( message.getContent().equals("맛집추천")) { 
 			check = "restr"; 
 			}
+		else if (message.getContent().equals("날씨")) {
+			check = "weather";				
+		}
+		else if (message.getContent().equals("미세먼지")||message.getContent().equals("미세")) {
+			check = "dust";				
+		}
 		else if (message.getContent().equals("처음으로")) { 
 			check = null;
+			bus_info.init();
+			subway_info.init();
 			return getKeyboard();
 			}
 		else { 
@@ -65,17 +81,23 @@ public class kakaoMessage {
 		else if (check.equals("restr")) {
 			return restaurant_info.getMessage(message); 
 			}
+		else if(check.equals("weather")) {
+			return weather_info.getMessage(message); 
+		}
+		else if(check.equals("dust")) {
+			return dust_info.getMessage(message); 
+		}
 		else {
-			return null; 
+			 return null;
 			}
 	}
 	
 	
 	String getKeyboard() throws JSONException {
-
+		
 		JSONObject jsonObject = new JSONObject();
-		Map<String, Object> map = new HashMap<>();
-
+		Map<String, String> map = new HashMap<>();
+		Map<String, Object> keyboard_map = new HashMap<>();
 		List<String> list = new ArrayList<>();
 
 		list.add("날씨");
@@ -84,13 +106,17 @@ public class kakaoMessage {
 		list.add("맛집추천");
 
 		JSONArray array = JSONArray.fromObject(list);
-		map.put("type", "buttons");
-		map.put("buttons", array);	
+		keyboard_map.put("type", "buttons");
+		keyboard_map.put("buttons", array);	
 
-		jsonObject.put("keyboard", map);
+		map.put("text", "처음으로");
+		
+		jsonObject.put("message", map);
+		jsonObject.put("keyboard", keyboard_map);
 		String json = jsonObject.toString();
 
 		return json;
+
 	}
 
 }

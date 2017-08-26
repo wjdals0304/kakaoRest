@@ -12,8 +12,8 @@ public class SubwayInfo implements functionCallConfig{
 	@Autowired
 	private TrafficInfoController trafficInfo;
 	
-	private int subway_button = 0;
-	private String station_name;
+	int subway_button = 0;
+	String station_name;
 	
 	public String getMessage(Message message) {
 		
@@ -29,21 +29,18 @@ public class SubwayInfo implements functionCallConfig{
 			}
 			return trafficInfo.choose_subway_line(station_name);	// 입력한 지하철역의 호선을 버튼으로 전달
 		}
-		else if(subway_button == 2) {	//3) 지하철 호선을 선택한다
+		else if(subway_button == 2) {	// 3) 지하철 호선을 선택한다
 			subway_button = 3;
 			String station_line = message.getContent();
 			return trafficInfo.write_subway_name(station_name, station_line);
 		}
-		else if(subway_button == 3) {	//4) 다른역 검색, 즐겨찾는 구간 추가, 처음으로 버튼 중 1개를 클릭한다
+		else if(subway_button == 3) {	// 4) 다른 역 검색, 즐겨찾는 구간 추가, 처음으로 버튼 중 1개를 클릭한다
 			if(message.getContent().equals("다른 역 검색")) {
 				subway_button = 1;
 				return trafficInfo.press_subway_button();
 			}
 			else if(message.getContent().equals("즐겨찾는 역 추가")) {
 
-			}
-			else if(message.getContent().equals("처음으로")) {	// "처음으로" 버튼 클릭시
-				
 			}
 		}
 		else {
@@ -53,4 +50,7 @@ public class SubwayInfo implements functionCallConfig{
 		return null;
 	}
 
+	public void init() {
+		subway_button = 0;
+	}
 }
