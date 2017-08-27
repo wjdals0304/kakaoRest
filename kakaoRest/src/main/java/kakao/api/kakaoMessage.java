@@ -43,6 +43,8 @@ public class kakaoMessage {
 	private DustInfo dust_info;
 
 
+
+
 	@RequestMapping(method = RequestMethod.POST)
 	String returnMessage(@RequestBody Message message)  {
 
@@ -63,6 +65,8 @@ public class kakaoMessage {
 		}
 		else if (message.getContent().equals("처음으로")) { 
 			check = null;
+			bus_info.init();
+			subway_info.init();
 			return getKeyboard();
 			}
 		else { 
@@ -92,29 +96,29 @@ public class kakaoMessage {
 	
 	
 	String getKeyboard() throws JSONException {
-
+		
 		JSONObject jsonObject = new JSONObject();
-		JSONObject jsonObjectSub = new JSONObject();
 		Map<String, String> map = new HashMap<>();
-		map.put("text", "처음으로");
-		
-		jsonObject.put("message", map);
-		
-		jsonObjectSub.put("type", "buttons");
-		
+		Map<String, Object> keyboard_map = new HashMap<>();
 		List<String> list = new ArrayList<>();
+		
 		list.add("날씨");
 		list.add("지하철");
 		list.add("버스");
 		list.add("맛집추천");
 		
 		JSONArray array = JSONArray.fromObject(list);
+		keyboard_map.put("type", "buttons");
+		keyboard_map.put("buttons", array);	
+
+		map.put("text", "처음으로");
 		
-		jsonObjectSub.put("buttons", array);
-		jsonObject.put("keyboard", jsonObjectSub);
-		
+		jsonObject.put("message", map);
+		jsonObject.put("keyboard", keyboard_map);
 		String json = jsonObject.toString();
+		
 		return json;
+
 	}
 	
 	
