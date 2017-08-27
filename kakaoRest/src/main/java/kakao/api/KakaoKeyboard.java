@@ -27,7 +27,10 @@ public class KakaoKeyboard {
 		list.add("지하철");
 		list.add("버스");
 		list.add("맛집추천");
+<<<<<<< HEAD
 		list.add("즐겨찾기 관리");
+=======
+>>>>>>> branch 'master' of https://github.com/wjdals0304/kakaoRest
 
 		JSONArray array = JSONArray.fromObject(list);
 
