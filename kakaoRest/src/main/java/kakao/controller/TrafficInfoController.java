@@ -6,9 +6,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
+
 import kakao.bookmark.domain.subway_Bookmark_VO;
 import kakao.bookmark.service.DbService;
 import kakao.response.RealtimeStationArrival;
@@ -265,5 +267,5 @@ public class TrafficInfoController {
 		return response_message;
 	}
 	
-
+	
 }
