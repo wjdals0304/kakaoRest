@@ -28,7 +28,7 @@ public class TrafficInfoController {
 	private String service_name = null;
 	private String api_key = "44516b5859617330313138684771494c";
 	private String decoded_api_key = null;
-
+	private String station_name_b,station_line_b;
 	private RealtimeStationArrival response;
 
 
@@ -191,6 +191,8 @@ public class TrafficInfoController {
 		}
 		
 		if(subway_line_list.size() == 1) { 
+			station_name_b=station_name;
+			station_line_b=subway_line_list.get(0);
 			return write_subway_name(station_name, subway_line_list.get(0)); 
 		}
 		
@@ -211,6 +213,9 @@ public class TrafficInfoController {
 		
 		String response_message = get_subway_info(station_name, station_line);
 		
+		station_name_b=station_name;
+		station_line_b=station_line;
+		
 		map.put("text", response_message);
 		jsonObject.put("message", map);
 		
@@ -229,7 +234,7 @@ public class TrafficInfoController {
 		return json;
 	}
 	
-	public String write_subway_bookmark(String station_name, String station_line,String user_key) {	//즐겨찾기에 추가 하기.
+	public String write_subway_bookmark(String user_key) {	//즐겨찾기에 추가 하기.
 
 		JSONObject jsonObject = new JSONObject();
 		Map<String, String> map = new HashMap<>();
@@ -237,8 +242,8 @@ public class TrafficInfoController {
 		
 		subway_Bookmark_VO bVo = new subway_Bookmark_VO();
 		String response_message;
-		bVo.setBookmark_station(station_name);
-		bVo.setBookmark_station_line(station_line);
+		bVo.setBookmark_station(station_name_b);
+		bVo.setBookmark_station_line(station_line_b);
 		bVo.setUser_key(user_key);
 
 		db.insert_Subwaybookmark(bVo);

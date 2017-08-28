@@ -62,11 +62,23 @@ public class BusInfo implements functionCallConfig{
 				return busInfo.press_bus_button();
 			}
 			else if(msg.equals("즐겨찾는 버스 추가")) {
-				bus_button = 1;
+				bus_button = 5;
 				return busInfo.bus_bookmark(message.getUser_key());
 				
 			}
 			
+		}
+		else if(bus_button ==5 ){
+			String msg = message.getContent();
+
+			if(msg.equals("다른 버스 검색")) {
+				bus_button = 2;
+				return busInfo.getStationByUidItem(station_id); 
+			}
+			else if(msg.equals("다른 정류소 검색")) {
+				bus_button = 1;
+				return busInfo.press_bus_button();
+			}
 		}
 		else {
 
