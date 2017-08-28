@@ -260,7 +260,7 @@ public class TrafficInfoController {
 		return json;
 	}
 	
-	public String print_subway_name(String station_name, String station_line) {	// step3 : 지하철역 버튼을 누른 후 지하철역을 입력했을 때
+	public String print_subway_name(String station_name, String station_line) {
 		
 		String response_message = get_subway_info(station_name, station_line);
 		
