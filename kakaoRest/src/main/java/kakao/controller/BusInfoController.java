@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
@@ -264,7 +265,28 @@ public class BusInfoController {
 		vo.setBus_num(ubus_num);
 		vo.setStation_num(ustation_num);
 
-		db.insert_Busbookmark(vo);
+		try{
+			db.insert_Busbookmark(vo);
+		}
+		catch(DataAccessException e){
+			
+			map.put("text", "이미 즐겨찾기에 추가되어 있어~ 확인해봐 (좋아)");
+			jsonObject.put("message", map);
+			
+			List<String> list = new ArrayList<>();
+			list.add("다른 버스 검색");
+			list.add("처음으로");
+
+			JSONArray array = JSONArray.fromObject(list);
+			
+			keyboard_map.put("type", "buttons");
+			keyboard_map.put("buttons", array);	
+			jsonObject.put("keyboard", keyboard_map);
+			
+			String json = jsonObject.toString();
+			return json;
+			
+		}
 		
 		map.put("text", "즐겨찾기에 추가됬어~(좋아)");
 		jsonObject.put("message", map);
