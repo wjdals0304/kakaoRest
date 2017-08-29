@@ -8,6 +8,7 @@ import java.util.Map;
 import java.util.Random;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Component;
 
 import kakao.bookmark.dao.DbMapper;
@@ -170,8 +171,28 @@ public class RestaurantController {
 		
 		vo.setUser_key(user_key);
 		
+		try{
 		db.insert_Restaurantbookmark(vo);
-	
+		}
+		catch(DataAccessException e){
+			map.put("text", "이미 즐겨찾기에 추가되어 있어~ 확인해봐 (좋아)");
+			jsonObject.put("message", map);
+			
+			jsonObjectKeyboard.put("type", "buttons");
+			List<String> list = new ArrayList<>();
+			list.add("다른 거 추천해줘");
+			list.add("처음으로");
+			JSONArray array = JSONArray.fromObject(list);
+
+			jsonObjectKeyboard.put("buttons", array);
+
+			jsonObject.put("keyboard", jsonObjectKeyboard);
+
+			String json = jsonObject.toString();
+		
+			return json;
+			
+		}
 		map.put("text", "즐겨찾기에 추가됬어~(좋아)");
 		jsonObject.put("message", map);
 		
