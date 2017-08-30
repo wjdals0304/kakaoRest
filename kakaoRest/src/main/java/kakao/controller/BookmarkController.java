@@ -651,5 +651,16 @@ public class BookmarkController {
 
 		return json;
 	}
+	
+	public String back_to_start(){
+		JSONObject jsonObject = new JSONObject();
+		Map<String, String> map = new HashMap<>();
+		
+		map.put("text","처음으로");
+		jsonObject.put("message", map);
+		
+		String json = jsonObject.toString();
+		return json;
+	}
 
 }
