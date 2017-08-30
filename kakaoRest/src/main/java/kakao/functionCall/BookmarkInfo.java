@@ -99,7 +99,10 @@ public class BookmarkInfo implements functionCallConfig {
 			flow=0;
 			return bookmarkInfo.delete_Restaurant_Bookmark(getMessage, message.getUser_key());
 		}//삭제 끝
-		
+		else{
+			flow=0;
+			return bookmarkInfo.back_to_start();
+		}
 		
 
 		return null;
