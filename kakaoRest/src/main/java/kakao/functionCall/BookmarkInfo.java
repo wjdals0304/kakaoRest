@@ -1,5 +1,6 @@
 package kakao.functionCall;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -19,9 +20,9 @@ public class BookmarkInfo implements functionCallConfig {
 	public String getMessage(Message message) {
 		// TODO Auto-generated method stub
 		getMessage = message.getContent();
-		if(flow ==0&&"즐겨찾기 관리".equals(getMessage))
+		if(flow ==0&&"즐겨찾기관리".equals(getMessage))
 		{
-			
+
 			flow = 1;
 			return bookmarkInfo.f_Bookmark();
 			
@@ -108,4 +109,7 @@ public class BookmarkInfo implements functionCallConfig {
 		return null;
 	}
 
+	public void init() {
+		flow = 0;
+	}
 }
