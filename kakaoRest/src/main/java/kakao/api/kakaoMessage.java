@@ -49,15 +49,15 @@ public class kakaoMessage {
 	
 	@RequestMapping(method = RequestMethod.POST)
 	String returnMessage(@RequestBody Message message)  {
-
-	
-	
 		
 		if (message.getContent().equals("지하철")) { 
 			check = "subway"; 
+			subway_info.init();
+
 			}
 		else if (message.getContent().equals("버스")) { 
 			check = "bus"; 
+			bus_info.init();
 			}
 		else if ( message.getContent().equals("맛집추천")) { 
 			check = "restr"; 
@@ -68,9 +68,9 @@ public class kakaoMessage {
 		else if (message.getContent().equals("미세먼지")||message.getContent().equals("미세")) {
 			check = "dust";				
 		}
-		else if(message.getContent().equals("즐겨찾기 관리")){
+		else if(message.getContent().equals("즐겨찾기관리")){
 			check = "bookmark";
-			
+			bookmark_info.init();
 		}
 		else if (message.getContent().equals("처음으로")) { 
 			check = null;
@@ -118,7 +118,7 @@ public class kakaoMessage {
 		list.add("지하철");
 		list.add("버스");
 		list.add("맛집추천");
-		list.add("즐겨찾기 관리");
+		list.add("즐겨찾기관리");
 		
 		JSONArray array = JSONArray.fromObject(list);
 		keyboard_map.put("type", "buttons");

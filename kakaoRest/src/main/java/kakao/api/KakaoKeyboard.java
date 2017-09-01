@@ -27,7 +27,7 @@ public class KakaoKeyboard {
 		list.add("지하철");
 		list.add("버스");
 		list.add("맛집추천");
-		list.add("즐겨찾기 관리");
+		list.add("즐겨찾기관리");
 
 		JSONArray array = JSONArray.fromObject(list);
 
