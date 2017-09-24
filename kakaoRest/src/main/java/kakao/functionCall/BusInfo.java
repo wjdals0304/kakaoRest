@@ -33,7 +33,7 @@ public class BusInfo implements functionCallConfig{
 			else if(check.length() == 0 && tmp.length() != 5) {	//잘못된 입력값이면
 				return null;
 			}
-			else {		//입력값이 정류소이름이면 
+			else {		//입력값이 정류소 이름이면 
 				bus_button = 3;
 				return busInfo.write_station_name(tmp);
 			}
